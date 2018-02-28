@@ -1,15 +1,22 @@
 public class PageTableEntry {
 
-  private int pageFrameNum;
-  private int vBit;
-  private int rBit;
-  private int dBit;
+  int pageFrameNum;
+  int vBit;
+  int rBit;
+  int dBit;
 
   PageTableEntry(int pageFrameNum) {
     this.pageFrameNum = pageFrameNum;
     this.vBit = 0;
     this.rBit = 0;
     this.dBit = 0;
+  }
+
+  PageTableEntry() {
+    this.vBit = 0;
+    this.rBit = 0;
+    this.dBit = 0;
+    this.pageFrameNum = -1;
   }
 
   public int getPageFrameNum() {
