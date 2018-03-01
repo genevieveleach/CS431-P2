@@ -10,8 +10,10 @@ public class CPU {
     int R/W
     int address
     int data
+    ReplaceTLBEntry()
+     
     - getData(int, int, int){
-      - Sets B
+      - Sets 3 ints
       - check TLB() > -1 if valid
       - check Pagetable() > -1 if valid
         h/m/s is set
