@@ -2,7 +2,7 @@ import java.util.*;
 import java,io.*;
 
 public class Driver {
-  String address;
+  String addr;
   int rw;
   String value;
   int soft;
