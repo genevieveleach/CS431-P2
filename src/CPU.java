@@ -5,6 +5,7 @@ public class CPU {
   public static void readFile(){
     while(input.hasNextLine() == true){
       String line = input.nextLine();
+      int addr = Integer.parseInt("0x" + line);
       int counter = 0;
       if (counter/20 == 0){
         OS.resetR();
@@ -20,13 +21,14 @@ public class CPU {
       else{
         OS.pull(PT#);
       }
+      addr = 
       System.out.println(addr + "," + rw + "," + value + "," + soft + "," hard + "," + hit + "," + evicted + "," + dirty);
       counter++;
     }    
   }
   Class MMU{
     int R/W;
-    int address;
+    int address; //what does this store?
     int data;
     public static void ReplaceTLBEntry(){
     }
