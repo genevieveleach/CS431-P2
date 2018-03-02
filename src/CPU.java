@@ -5,7 +5,7 @@ public class CPU {
   public static void readFile(){
     while(input.hasNextLine() == true){
       String line = input.nextLine();
-      int addr = Integer.parseInt("0x" + line);
+      int addr = Integer.parseInt(line, 16);
       int counter = 0;
       if (counter/20 == 0){
         OS.resetR();
