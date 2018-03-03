@@ -1,9 +1,9 @@
 public class PhysicalMemory {
 
-  //TODO: figure out actual numbers
-  private double ram[][] = new double[pageAmt][pageSize];
+  double ram[][] = new double[256][256];
 
   PhysicalMemory() {
+    //instantiation?
   }
 
   public double getPhysicalMemory(int row, int column) {

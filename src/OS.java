@@ -1,5 +1,5 @@
 public class OS {
-  pointer to array values in page table
+  /*pointer to array values in page table
   ReplacePageEntry()
   int pointer
   ReadPage()
@@ -8,5 +8,5 @@ public class OS {
   WritePage()
     - write to .pg file from Physical memory
     - reset d bit
-  ResetR()
+  ResetR()*/
 }
