@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.BufferedWriter;
 
 public class OS {
   /*pointer to array values in page table
@@ -23,8 +24,15 @@ public class OS {
       return new File(dest);
   }
 
-  private void writePage() {
-
+  private void writePage( String pageNum ) throws IOException {
+      int pageN = Integer.parseInt( pageNum, 16 );
+      File outputPage = new File("../page_files/copy/" + pageNum + ".pg");
+      BufferedWriter writer = Files.newBufferedWriter(outputPage, "US-ASCII");
+      for( int i = 0; i < 256; i++) {
+        int temp = (int) physicalMemory.getPhysicalMem( pageN, i );
+        writer.write(temp);
+        writer.newLine();
+      }
   }
 
   private void resetR(TLBEntry[] TLB, VirtualPageTable pageTable) {
