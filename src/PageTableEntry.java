@@ -1,4 +1,5 @@
 public class PageTableEntry{
+
     private int pageFrameNum;
     private int v, r, d;
 

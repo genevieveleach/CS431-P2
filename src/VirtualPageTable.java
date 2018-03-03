@@ -1,8 +1,9 @@
 public class VirtualPageTable {
-  // this is the front half of the CPU adressable bits
+  // this is the front half of the CPU addressable bits
   //      page table number==>[9A][BC]
   // this is that list
   private PageTableEntry[] virtPageTable = new PageTableEntry[256];
+
   public void resetRBit(){
     for (int i=0; i< 256; i++)
       virtPageTable[i].setR(0);
