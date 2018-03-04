@@ -25,7 +25,7 @@ public class CPU {
         OS.resetR();
         instCount = 0;
         }
-        - process and pass to mmu
+        MMU.getData(rw, addr, 0);
         if (valid and Read){
           Physicalmem.Read(PF#, offset#);
         }
@@ -37,14 +37,27 @@ public class CPU {
         }
       }
       else if (rw == 1){
-        String data = input.nextLine();
-        
+        String d = input.nextLine();
+        int da = Integer.parseInt(d);
+        if (instCount / 20 == 0) {
+          OS.resetR();
+          instCount = 0;
+        }
+        MMU.getData(rw, addr, da);
+        if (valid and Read){
+          Physicalmem.Read(PF#, offset#);
+        }
+        else if (Valid){
+          Physicalmem.write(PF#, offset, data);
+        }
+        else{
+          OS.pull(PT#);
+        }
       }
       else {
         System.out.println("Error when parsing file");
         System.exit(0);
       }
-      addr = 
       System.out.println(addr + "," + rw + "," + value + "," + soft + "," hard + "," + hit + "," + evicted + "," + dirty);
       instCount++;
     }
