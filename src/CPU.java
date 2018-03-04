@@ -54,14 +54,15 @@ public class CPU {
       this.address = address;
       this.data = data;
 
-      int vPage = this.getVPageNum(address);
-      int pageFrameNum = getPageFrameNum( vPage );
+      int vPage = this.getVPageNum(address);          // this is the first 2 hex nums of [1A][2B]
+      int pageFrameNum = getPageFrameNum( vPage );    //this is the first part of [A][BC]
 
       //read or write is decided
       setRW(vPage, rw);
       if (rw == 1){   //write
         //im not sure who writes to physical mem, so move this as needed
         PM.setPhysicalMem(pageFrameNum, this.getOffset(address), data);
+        this.setD(vPage);
       }
       else{   //read
         System.out.println(PM.getPhysicalMem(pageFrameNum, this.getOffset(address)));
@@ -70,6 +71,16 @@ public class CPU {
       return 0;
     }
 
+    private void setD(int address){
+      for(int i=0; i<8; i++){
+        if (TLB[i].getvPageNum() == address) {
+          TLB[i].setD(1);
+          vPT.setD(address, 1);
+          return;
+        }
+      }
+
+    }
     private void setRW(int address, int rw){
       for (int i=0; i< 8; i++){
         if (TLB[i].getvPageNum() == address){
@@ -103,6 +114,7 @@ public class CPU {
           //call OS to get data from files
           //store data in physical mem
           //return the "page" number
+          //code for outpting to CSV file about evited page # && if the page was dirty goes here
         }
         else{   //soft miss
           //nothing "logic" code happens here, just here to write that a soft miss happened
