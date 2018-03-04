@@ -3,30 +3,39 @@ import java.io.*;
 
 public class CPU {
   public static void readFile(Scanner input) {
+    int instCount = 0;
     while (input.hasNextLine()) {
+      String rewr = input.nextLine();
+      int rw = Integer.parstInt(rewr);
       String line = input.nextLine();
-      String name = line.substring(0,2);
-      String offset = line.substring(2,4);
-      int addr = Integer.parseInt(name, 16);
-      int off = Integer.parseInt(offset, 16);
-      int instCount = 0;
-      if (instCount / 20 == 0) {
+      int addr = Integer.parseInt(line, 16);
+      if (rw == 0){
+        if (instCount / 20 == 0) {
         OS.resetR();
         instCount = 0;
+        }
+        - process and pass to mmu
+        if (valid and Read){
+          Physicalmem.Read(PF#, offset#);
+        }
+        else if (Valid){
+          Physicalmem.write(PF#, offset, data);
+        }
+        else{
+          OS.pull(PT#);
+        }
       }
-      /*- process and pass to mmu
-      if (valid and Read){
-        Physicalmem.Read(PF#, offset#);
+      else if (rw == 1){
+        String data = input.nextLine();
+        
       }
-      else if (Valid){
-        pm.write(PF#, offset, data);
-      }
-      else{
-        OS.pull(PT#);
+      else {
+        System.out.println("Error when parsing file");
+        System.exit(0);
       }
       addr = 
       System.out.println(addr + "," + rw + "," + value + "," + soft + "," hard + "," + hit + "," + evicted + "," + dirty);
-      counter++;*/
+      instCount++;
     }
   }
 
