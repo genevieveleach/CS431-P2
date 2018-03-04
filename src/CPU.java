@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class CPU {
+  //variables
   private TLBEntry[] TLB = new TLBEntry[8];
   private VirtualPageTable vPT;
   private PhysicalMemory PM;
@@ -9,46 +10,54 @@ public class CPU {
     for (int i=0; i<8; i++){
       TLB[i] = new TLBEntry();
     }
-    vPT= new VirtualPageTable();
+    vPT = new VirtualPageTable();
   }
+
   public static void readFile(Scanner input) {
+    int instCount = 0;
     while (input.hasNextLine()) {
+      String rewr = input.nextLine();
+      int rw = Integer.parstInt(rewr);
       String line = input.nextLine();
       int addr = Integer.parseInt(line, 16);
-      int instCount = 0;
-      if (instCount / 20 == 0) {
+      if (rw == 0){
+        if (instCount / 20 == 0) {
         OS.resetR();
         instCount = 0;
+        }
+        - process and pass to mmu
+        if (valid and Read){
+          Physicalmem.Read(PF#, offset#);
+        }
+        else if (Valid){
+          Physicalmem.write(PF#, offset, data);
+        }
+        else{
+          OS.pull(PT#);
+        }
       }
-      /*- process and pass to mmu
-      if (valid and Read){
-        Physicalmem.Read(PF#, offset#);
+      else if (rw == 1){
+        String data = input.nextLine();
+        
       }
-      else if (Valid){
-        pm.write(PF#, offset, data);
-      }
-      else{
-        OS.pull(PT#);
+      else {
+        System.out.println("Error when parsing file");
+        System.exit(0);
       }
       addr = 
       System.out.println(addr + "," + rw + "," + value + "," + soft + "," hard + "," + hit + "," + evicted + "," + dirty);
-      counter++;*/
+      instCount++;
     }
   }
 
-
-  private class MMU {
+  public class MMU {
     //if 1 write, if 0 read
     int rw;
     int address;
     int data;
     int TLBPointer;
 
-    //init pointer to 0 and make TLB a list of empty slots
-    public MMU(){
-      TLBPointer = 0;
-    }
-
+    public MMU() { TLBPointer = 0; }
     public int getData(int rw, int address, int data) {
       this.rw = rw;
       this.address = address;
@@ -82,11 +91,11 @@ public class CPU {
 
     }
     private void setRW(int address, int rw){
-      for (int i=0; i< 8; i++){
-        if (TLB[i].getvPageNum() == address){
+      for (int i=0; i< 8; i++) {
+        if (TLB[i].getvPageNum() == address) {
           TLB[i].setR(1);
-          vPT.setR(address,1);
-          if(rw == 1) {
+          vPT.setR(address, 1);
+          if (rw == 1) {
             TLB[i].setD(1);
             vPT.setD(address, 1);
           }
@@ -125,7 +134,6 @@ public class CPU {
       else{ //hit
         // nothing "logic" happens here either, only ment to write that a hit happened
       }
-
       return pageFrameNum;
     }
     private void newPageTableEntry(int pFrameNum, int address){
@@ -135,23 +143,19 @@ public class CPU {
       TLBPointer = (TLBPointer + 1) % 8;
     }
     private int checkPageTable(int address) {
-      if (vPT.getV(address) == 1){    //if adress is valid...
-        vPT.setR(address, 1); // sets R bit to 1
-        return vPT.getPageFrameNum(address);  //returns page frame number
+      for (int i=0; i< 8; i++){
+        if (TLB[i].getvPageNum() == address) return i;
       }
       return -1;
     }
     private int checkTLB(int address) {
       for(int i = 0; i < 8; i++) {
-        if(TLB[i].getvPageNum() == address) { return i; }
+        if(TLB[i].getvPageNum() == address) return i;
       }
       return -1;
     }
   }
-
-
-  /*
-  Class MMU{
+  /*Class MMU{
     int R/W;
     int address; //what does this store?
     int data;
@@ -169,6 +173,5 @@ public class CPU {
       }
       return page frame #
     }
-  }
-  */
+  }*/
 }
