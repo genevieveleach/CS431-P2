@@ -69,7 +69,6 @@ public class CPU {
             //read or write is decided
             setRW(vPage, rw);
             if (rw == 1) {   //write
-                //im not sure who writes to physical mem, so move this as needed
                 PM.setPhysicalMem(pageFrameNum, offset, data);
                 this.setD(vPage);
             }
@@ -115,6 +114,13 @@ public class CPU {
                     //store data in physical mem
                     //return the "page" number
                     //code for outputting to CSV file about evited page # && if the page was dirty goes here
+
+                    /*
+                    remove comments later for when OS makes the function this needs
+                    PLEASE DONT USE THE FUNCTION AS THE REASON FUNCTION NAME!! SERIOUSLY!
+                    also removese these "real" comments~_~
+                    pageFrameNum = OS_Function_That_Adds_Data_Into_Physical_Mem_And_Returns_The_Page_Number();
+                     */
                 }
                 else{   //soft miss
                     //nothing "logic" code happens here, just here to write that a soft miss happened
