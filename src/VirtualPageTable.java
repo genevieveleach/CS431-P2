@@ -4,6 +4,11 @@ public class VirtualPageTable {
   // this is that list
   private PageTableEntry[] virtPageTable = new PageTableEntry[256];
 
+  public VirtualPageTable(){
+    for (int i=0; i<256; i++){
+      virtPageTable[i] = new PageTableEntry(-1);
+    }
+  }
   public void resetRBit(){
     for (int i=0; i< 256; i++)
       virtPageTable[i].setR(0);
@@ -17,8 +22,8 @@ public class VirtualPageTable {
   public int getPageFrameNum(int index) { return virtPageTable[index].getPageFrameNum(); }
 
 
-  public void getV(int index, int bit) { virtPageTable[index].setV(bit); }
-  public void getR(int index, int bit) { virtPageTable[index].setR(bit); }
-  public void getD(int index, int bit) { virtPageTable[index].setD(bit); }
-  public void getPageFrameNum(int index, int bit) { virtPageTable[index].setPageFrameNum(bit); }
+  public void setV(int index, int bit) { virtPageTable[index].setV(bit); }
+  public void setR(int index, int bit) { virtPageTable[index].setR(bit); }
+  public void setD(int index, int bit) { virtPageTable[index].setD(bit); }
+  public void setPageFrameNum(int index, int bit) { virtPageTable[index].setPageFrameNum(bit); }
 }
