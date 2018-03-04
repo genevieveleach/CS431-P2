@@ -20,14 +20,16 @@ public class CPU {
         while (input.hasNextLine()) {
             String rewr = input.nextLine();
             int rw = Integer.parseInt(rewr);
+            Driver.rw = rw;
             String line = input.nextLine();
-            int addr = Integer.parseInt(line, 16);
+/*            Driver.addr = line;
+            int addr = Integer.parseInt(line, 16);*/
             if (rw == 0){
                 if (instCount % 5 == 0) {
                     OS.resetR(TLB, vPT);
                     instCount = 0;
                 }
-                MMU.getData(rw, addr, 0);
+                MMU.getData(rw, line, 0);
                 if (valid and Read){
                     Physicalmem.Read(PF#, offset#);
                 }
@@ -68,29 +70,30 @@ public class CPU {
     public class MMU {
         //if 1 write, if 0 read
         int rw;
-        int address;
+        String address;
         int data;
         int TLBPointer;
 
         public MMU() { TLBPointer = 0; }
 
-        int getData(int rw, int address, int data) {
+        int getData(int rw, String address, int data) {
             this.rw = rw;
             this.address = address;
             this.data = data;
 
-            int vPage = this.getVPageNum(address);          // this is the first 2 hex nums of [1A][2B]
+            int vPage = Integer.parseInt(address.substring(0,2), 16);        // this is the first 2 hex nums of [1A][2B]
             int pageFrameNum = getPageFrameNum( vPage );    //this is the first part of [A][BC]
+            int offset = Integer.parseInt(address.substring(2,4), 16);
 
             //read or write is decided
             setRW(vPage, rw);
             if (rw == 1) {   //write
                 //im not sure who writes to physical mem, so move this as needed
-                PM.setPhysicalMem(pageFrameNum, this.getOffset(address), data);
+                PM.setPhysicalMem(pageFrameNum, offset, data);
                 this.setD(vPage);
             }
             else {   //read
-                System.out.println(PM.getPhysicalMem(pageFrameNum, this.getOffset(address)));
+                System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
             }
             return 0;
         }
@@ -118,16 +121,7 @@ public class CPU {
                 }
             }
         }
-        private int getOffset(int address){
-            //TODO:
-            //gets the offset
-            return -1;
-        }
-        private int getVPageNum(int address){
-            //TODO:
-            // this is where we extract the first half of the address
-            return -1;
-        }
+
         private int getPageFrameNum(int address){
             //initial TLB check
             int pageFrameNum = this.checkTLB(address);
@@ -139,7 +133,7 @@ public class CPU {
                     //call OS to get data from files
                     //store data in physical mem
                     //return the "page" number
-                    //code for outpting to CSV file about evited page # && if the page was dirty goes here
+                    //code for outputting to CSV file about evited page # && if the page was dirty goes here
                 }
                 else{   //soft miss
                     //nothing "logic" code happens here, just here to write that a soft miss happened

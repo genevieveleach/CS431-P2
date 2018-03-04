@@ -22,4 +22,8 @@ public class Driver {
         CPU.readFile(input);
     }
 
+    void writeDatatoFile() {
+
+    }
+
 }
