@@ -4,9 +4,9 @@ import static com.sun.javafx.css.SizeUnits.PT;
 
 public class CPU {
     //variables
-    private TLBEntry[] TLB = new TLBEntry[8];
-    private VirtualPageTable vPT;
-    private PhysicalMemory PM;
+    private static TLBEntry[] TLB = new TLBEntry[8];
+    private static VirtualPageTable vPT;
+    private static PhysicalMemory PM;
 
     public CPU(){
         for (int i=0; i<8; i++){
@@ -15,7 +15,7 @@ public class CPU {
         vPT = new VirtualPageTable();
     }
 
-    void readFile(Scanner input) {
+    static void readFile(Scanner input) {
         int instCount = 0;
         while (input.hasNextLine()) {
             String rewr = input.nextLine();
@@ -43,24 +43,24 @@ public class CPU {
                 System.out.println("Error when parsing file");
                 System.exit(0);
             }
-            System.out.println(Driver.addr + "," + Driver.rw + "," + Driver.value + "," + Driver.soft + "," + Driver.hard + "," + Driver.hit + "," + Driver.evicted + "," + Driver.dirty);
+            Driver.writeDataToFile(Driver.csv);
             instCount++;
         }
     }
 
-    public class MMU {
+    public static class MMU {
         //if 1 write, if 0 read
-        int rw;
-        String address;
-        int data;
-        int TLBPointer;
+        static int rw;
+        static String address;
+        static int data;
+        static int TLBPointer;
 
         public MMU() { TLBPointer = 0; }
 
-        int getData(int rw, String address, int data) {
-            this.rw = rw;
-            this.address = address;
-            this.data = data;
+        static int getData(int rewr, String addr, int datas) {
+            rw = rewr;
+            address = addr;
+            data = datas;
 
             int vPage = Integer.parseInt(address.substring(0,2), 16);        // this is the first 2 hex nums of [1A][2B]
             int pageFrameNum = getPageFrameNum( vPage );    //this is the first part of [A][BC]
@@ -70,7 +70,7 @@ public class CPU {
             setRW(vPage, rw);
             if (rw == 1) {   //write
                 PM.setPhysicalMem(pageFrameNum, offset, data);
-                this.setD(vPage);
+                setD(vPage);
             }
             else {   //read
                 System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
@@ -78,7 +78,7 @@ public class CPU {
             return 0;
         }
 
-        private void setD(int address){
+        private static void setD(int address){
             for(int i=0; i<8; i++){
                 if (TLB[i].getvPageNum() == address) {
                     TLB[i].setD(1);
@@ -88,7 +88,7 @@ public class CPU {
             }
 
         }
-        private void setRW(int address, int rw){
+        private static void setRW(int address, int rw){
             for (int i=0; i< 8; i++) {
                 if (TLB[i].getvPageNum() == address) {
                     TLB[i].setR(1);
@@ -102,11 +102,11 @@ public class CPU {
             }
         }
 
-        private int getPageFrameNum(int address){
+        private static int getPageFrameNum(int address){
             //initial TLB check
-            int pageFrameNum = this.checkTLB(address);
+            int pageFrameNum = checkTLB(address);
             if (pageFrameNum == -1){  //miss in TLB
-                pageFrameNum = this.checkPageTable(address);
+                pageFrameNum = checkPageTable(address);
                 if (pageFrameNum == -1){  //hard miss
                     Driver.hard = 1;
                     //TODO:
@@ -135,19 +135,19 @@ public class CPU {
             }
             return pageFrameNum;
         }
-        private void newPageTableEntry(int pFrameNum, int address){
+        private static void newPageTableEntry(int pFrameNum, int address){
             TLBEntry temp = new TLBEntry(pFrameNum, address);
             temp.setV(1);
             TLB[TLBPointer] = temp;
             TLBPointer = (TLBPointer + 1) % 8;
         }
-        private int checkPageTable(int address) {
+        private static int checkPageTable(int address) {
             for (int i=0; i< 8; i++){
                 if (TLB[i].getvPageNum() == address) return i;
             }
             return -1;
         }
-        private int checkTLB(int address) {
+        private static int checkTLB(int address) {
             for(int i = 0; i < 8; i++) {
                 if(TLB[i].getvPageNum() == address) return i;
             }
