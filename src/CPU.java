@@ -5,9 +5,10 @@ public class CPU {
   public static void readFile(Scanner input) {
     while (input.hasNextLine()) {
       String line = input.nextLine();
-     // String a = line.substring(0,2);
-     // String offset = line.substring(2,4);
-      int addr = Integer.parseInt(line, 16);
+      String name = line.substring(0,2);
+      String offset = line.substring(2,4);
+      int addr = Integer.parseInt(name, 16);
+      int off = Integer.parseInt(offset, 16);
       int instCount = 0;
       if (instCount / 20 == 0) {
         OS.resetR();
