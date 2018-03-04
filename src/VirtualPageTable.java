@@ -3,7 +3,7 @@ public class VirtualPageTable {
   //      page table number==>[9A][BC]
   // this is that list
   private PageTableEntry[] virtPageTable = new PageTableEntry[256];
-
+  
   public VirtualPageTable(){
     for (int i=0; i<256; i++){
       virtPageTable[i] = new PageTableEntry(-1);
@@ -20,7 +20,6 @@ public class VirtualPageTable {
   public int getR(int index) { return virtPageTable[index].getR(); }
   public int getD(int index) { return virtPageTable[index].getD(); }
   public int getPageFrameNum(int index) { return virtPageTable[index].getPageFrameNum(); }
-
 
   public void setV(int index, int bit) { virtPageTable[index].setV(bit); }
   public void setR(int index, int bit) { virtPageTable[index].setR(bit); }

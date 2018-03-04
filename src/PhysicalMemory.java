@@ -1,3 +1,5 @@
+import java.util.Arrays
+
 public class PhysicalMemory{
     /*
     physical memory has "12" bytes of addressable data points
@@ -6,6 +8,9 @@ public class PhysicalMemory{
     0x ABC      Page number==>[A][BC]<==Offset
     */
     private int ram[][] = new int[16][256];
+    
+    public PhysicalMemory() {
+    }
 
     public double getPhysicalMem(int row, int col){
         return ram[row][col];

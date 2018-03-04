@@ -13,6 +13,7 @@ public class CPU {
             TLB[i] = new TLBEntry();
         }
         vPT = new VirtualPageTable();
+        PM = new PhysicalMemory();
     }
 
     static void readFile(Scanner input) {
@@ -71,9 +72,11 @@ public class CPU {
             if (rw == 1) {   //write
                 PM.setPhysicalMem(pageFrameNum, offset, data);
                 setD(vPage);
+                Driver.value = data;
             }
             else {   //read
                 System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
+                Driver.value = PM.getPhysicalMem(pageFrameNum, offset);
             }
             return 0;
         }
@@ -109,6 +112,8 @@ public class CPU {
                 pageFrameNum = checkPageTable(address);
                 if (pageFrameNum == -1){  //hard miss
                     Driver.hard = 1;
+                    pageFrameNum = OS.hardMiss(address);
+                    
                     //TODO:
                     //call OS to get data from files
                     //store data in physical mem
