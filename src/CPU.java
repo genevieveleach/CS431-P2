@@ -15,7 +15,7 @@ public class CPU {
         vPT = new VirtualPageTable();
     }
 
-    void readFile(Scanner input) {
+    static void readFile(Scanner input) {
         int instCount = 0;
         while (input.hasNextLine()) {
             String rewr = input.nextLine();
