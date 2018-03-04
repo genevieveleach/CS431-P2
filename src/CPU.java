@@ -22,8 +22,7 @@ public class CPU {
             int rw = Integer.parseInt(rewr);
             Driver.rw = rw;
             String line = input.nextLine();
-/*            Driver.addr = line;
-            int addr = Integer.parseInt(line, 16);*/
+            Driver.addr = line;
             if (rw == 0){
                 if (instCount % 5 == 0) {
                     OS.resetR(TLB, vPT);
@@ -43,11 +42,11 @@ public class CPU {
             else if (rw == 1){
                 String d = input.nextLine();
                 int da = Integer.parseInt(d);
-                if (instCount / 20 == 0) {
-                    OS.resetR();
+                if (instCount % 5 == 0) {
+                    OS.resetR(TLB, vPT);
                     instCount = 0;
                 }
-                MMU.getData(rw, addr, da);
+                MMU.getData(rw, line, da);
                 if (valid and Read){
                     Physicalmem.Read(PF#, offset#);
                 }
