@@ -43,7 +43,7 @@ public class CPU {
                 System.out.println("Error when parsing file");
                 System.exit(0);
             }
-            System.out.println(Driver.addr + "," + Driver.rw + "," + Driver.value + "," + Driver.soft + "," + Driver.hard + "," + Driver.hit + "," + Driver.evicted + "," + Driver.dirty);
+            Driver.writeDataToFile(Driver.csv);
             instCount++;
         }
     }
