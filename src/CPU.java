@@ -71,7 +71,7 @@ public class CPU {
             if (rw == 1) {   //write
                 //im not sure who writes to physical mem, so move this as needed
                 PM.setPhysicalMem(pageFrameNum, offset, data);
-                this.setD(vPage);
+                setD(vPage);
             }
             else {   //read
                 System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
