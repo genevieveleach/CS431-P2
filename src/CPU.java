@@ -1,12 +1,13 @@
 import java.util.Scanner;
+import java.io.IOException;
 
 import static com.sun.javafx.css.SizeUnits.PT;
 
 public class CPU {
     //variables
     private static TLBEntry[] TLB = new TLBEntry[8];
-    private static VirtualPageTable vPT;
-    private static PhysicalMemory PM;
+    public static VirtualPageTable vPT;
+    public static PhysicalMemory PM;
 
     public CPU(){
         for (int i=0; i<8; i++){
@@ -16,7 +17,7 @@ public class CPU {
         PM = new PhysicalMemory();
     }
 
-    static void readFile(Scanner input) {
+    static void readFile(Scanner input) throws IOException {
         int instCount = 0;
         while (input.hasNextLine()) {
             String rewr = input.nextLine();
@@ -58,7 +59,7 @@ public class CPU {
 
         public MMU() { TLBPointer = 0; }
 
-        static int getData(int rewr, String addr, int datas) {
+        static int getData(int rewr, String addr, int datas) throws IOException {
             rw = rewr;
             address = addr;
             data = datas;
@@ -71,11 +72,11 @@ public class CPU {
             setRW(vPage, rw);
             if (rw == 1) {   //write
                 PM.setPhysicalMem(pageFrameNum, offset, data);
-                Driver.value = data;
+                Driver.value = Integer.toString(data);
             }
             else {   //read
                 System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
-                Driver.value = PM.getPhysicalMem(pageFrameNum, offset);
+                Driver.value = Double.toString(PM.getPhysicalMem(pageFrameNum, offset));
             }
             return 0;
         }
@@ -94,7 +95,7 @@ public class CPU {
             }
         }
 
-        private static int getPageFrameNum(int address){
+        private static int getPageFrameNum(int address) throws IOException{
             //initial TLB check
             int pageFrameNum = checkTLB(address);
             if (pageFrameNum == -1){  //miss in TLB

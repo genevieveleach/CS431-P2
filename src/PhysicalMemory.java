@@ -1,5 +1,3 @@
-import java.util.Arrays
-
 public class PhysicalMemory{
     /*
     physical memory has "12" bytes of addressable data points

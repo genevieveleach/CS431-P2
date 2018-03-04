@@ -13,7 +13,7 @@ public class Driver {
     static String dirty;
     static PrintStream csv;
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         String path = args[0];
         File file = new File(path);
         Scanner input = new Scanner(file);
