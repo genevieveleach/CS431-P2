@@ -70,7 +70,6 @@ public class CPU {
             setRW(vPage, rw);
             if (rw == 1) {   //write
                 PM.setPhysicalMem(pageFrameNum, offset, data);
-                setD(vPage);
             }
             else {   //read
                 System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
@@ -78,19 +77,9 @@ public class CPU {
             return 0;
         }
 
-        private static void setD(int address){
-            for(int i=0; i<8; i++){
-                if (TLB[i].getvPageNum() == address) {
-                    TLB[i].setD(1);
-                    vPT.setD(address, 1);
-                    return;
-                }
-            }
-
-        }
         private static void setRW(int address, int rw){
             for (int i=0; i< 8; i++) {
-                if (TLB[i].getvPageNum() == address) {
+                if (TLB[i].getvPageNum() == address && TLB[i].getV() == 1) {
                     TLB[i].setR(1);
                     vPT.setR(address, 1);
                     if (rw == 1) {
@@ -130,7 +119,7 @@ public class CPU {
                 newPageTableEntry(pageFrameNum, address);
             }
             else{ //hit
-                // nothing "logic" happens here either, only ment to write that a hit happened
+                pageFrameNum = TLB[pageFrameNum].getPageFrameNum();
                 Driver.hit = 1;
             }
             return pageFrameNum;
@@ -142,14 +131,11 @@ public class CPU {
             TLBPointer = (TLBPointer + 1) % 8;
         }
         private static int checkPageTable(int address) {
-            for (int i=0; i< 8; i++){
-                if (TLB[i].getvPageNum() == address) return i;
-            }
-            return -1;
+            return vPT.getV(address) == 1 ? vPT.getPageFrameNum(address):-1;
         }
         private static int checkTLB(int address) {
             for(int i = 0; i < 8; i++) {
-                if(TLB[i].getvPageNum() == address) return i;
+                if(TLB[i].getvPageNum() == address && TLB[i].getV() == 1) return i;
             }
             return -1;
         }
