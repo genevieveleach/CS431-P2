@@ -29,16 +29,7 @@ public class CPU {
                     instCount = 0;
                 }
                 MMU.getData(rw, line, 0);
-                if (valid and Read){
-                    Physicalmem.Read(PF#, offset#);
-                }
-        else if (Valid){
-                    Physicalmem.write(PF#, offset, data);
-                }
-                else{
-                    OS.pull(PT#);
-                }
-            }
+            } 
             else if (rw == 1){
                 String d = input.nextLine();
                 int da = Integer.parseInt(d);
@@ -47,15 +38,6 @@ public class CPU {
                     instCount = 0;
                 }
                 MMU.getData(rw, line, da);
-                if (valid and Read){
-                    Physicalmem.Read(PF#, offset#);
-                }
-        else if (Valid){
-                    Physicalmem.write(PF#, offset, data);
-                }
-                else{
-                    OS.pull(PT#);
-                }
             }
             else {
                 System.out.println("Error when parsing file");
