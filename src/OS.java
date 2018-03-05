@@ -1,12 +1,10 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.StandardCopyOption;
 
-public class OS {
-  static int clockIndex;
+class OS {
+  private static int clockIndex;
   
   static void initPages() throws IOException {
       clockIndex = 0;
@@ -70,8 +68,8 @@ public class OS {
   }
 
   static void resetR(TLBEntry[] TLB, VirtualPageTable pageTable) {
-      for(int i = 0; i < TLB.length; i++) {
-          TLB[i].setR(0);
+      for (TLBEntry aTLB : TLB) {
+          aTLB.setR(0);
       }
       pageTable.resetRBit();
   }
@@ -79,7 +77,7 @@ public class OS {
 
   ///testsss
     private static int numOfPagesLeft = 0;
-    public static int hardMiss(int pageNum) throws IOException{
+    static int hardMiss(int pageNum) throws IOException{
         if ( numOfPagesLeft < 16){  //there are still free pages available
             // just add them straight;
             writeToPhysicalMem(numOfPagesLeft, pageNum);

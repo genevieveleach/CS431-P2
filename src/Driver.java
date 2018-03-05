@@ -9,9 +9,9 @@ public class Driver {
     static int soft;
     static int hard;
     static int hit;
-    public static String evicted;
-    public static int dirty;
-    static PrintStream csv;
+    static String evicted;
+    static int dirty;
+    private static PrintStream csv;
 
     public static void main(String[] args) throws Exception {
         String path = args[0];
