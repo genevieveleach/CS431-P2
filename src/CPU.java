@@ -1,7 +1,5 @@
-import java.util.Scanner;
 import java.io.IOException;
-
-import static com.sun.javafx.css.SizeUnits.PT;
+import java.util.Scanner;
 
 public class CPU {
     //variables
