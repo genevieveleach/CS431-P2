@@ -35,15 +35,27 @@ public class OS {
       File outputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
       BufferedWriter writer = Files.newBufferedWriter(outputPage.toPath(), StandardCharsets.UTF_8, StandardOpenOption.WRITE);
 
-      CPU.vPT.setV(pageNum, 1);
-      CPU.vPT.setR(pageNum, 1);
-      CPU.vPT.setD(pageNum, 0);
-      CPU.vPT.setPageFrameNum(newOwnerOfPage, pageNum);
+      setAllBits(newOwnerOfPage, pageNum);
       //input data from file into physical memory
       for( int i = 0; i < 256; i++) {
           //TODO:
           CPU.PM.setPhysicalMem(pageNum, i, /*data to be written to [A][BC]*/);
       }
+  }
+
+  private static void setAllBits(int newOwnerOfPage, int pageNum){
+      for(int i=0; i< 8; i++)
+          if( CPU.TLB[i].getvPageNum() == newOwnerOfPage){
+              CPU.TLB[i].setV(1);
+              CPU.TLB[i].setR(1);
+              CPU.TLB[i].setD(0);
+              CPU.TLB[i].setPageFrameNum(pageNum);
+              CPU.TLB[i].setvPageNum(newOwnerOfPage);
+          }
+      CPU.vPT.setV(newOwnerOfPage, 1);
+      CPU.vPT.setR(newOwnerOfPage, 1);
+      CPU.vPT.setD(newOwnerOfPage, 1);
+      CPU.vPT.setPageFrameNum(newOwnerOfPage, pageNum);
   }
 
   //this function, when the dirty bit was set, writes back into the files
