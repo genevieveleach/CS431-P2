@@ -116,12 +116,15 @@ public class OS {
             // just add them straight;
             writeToPhysicalMem(numOfPagesLeft, pageNum);
             numOfPagesLeft++;
+            Driver.evicted = "N/A";
             return numOfPagesLeft - 1;
         }
         else{   //so, all pages have been used up, so we need to activate the clock replacement algorithm
             for(int i = (clockIndex + 1) % 256; i != clockIndex; i = (i + 1) % 256){
                 if (CPU.vPT.getV(i) == 1  && CPU.vPT.getR(i)==0){
                     clockIndex = i;
+                    Driver.evicted = Integer.toHexString(i);
+                    Driver.dirty = 0;
                     return evict(pageNum, i);
                 }
             }
@@ -137,8 +140,10 @@ public class OS {
 
         //if vPT ==> D bit = 1, then write
         int pageNum = CPU.vPT.getPageFrameNum(evictedPageOwnerIndex);
-        if (CPU.vPT.getD(evictedPageOwnerIndex) == 1)
+        if (CPU.vPT.getD(evictedPageOwnerIndex) == 1) {
+            Driver.dirty=1;
             writeToPGFile(pageNum, evictedPageOwnerIndex);
+        }
         resetVRDBits(evictedPageOwnerIndex);
         writeToPhysicalMem(pageNum, newOwnerOfPageIndex);
         return pageNum;
