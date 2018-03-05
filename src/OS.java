@@ -1,8 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
@@ -40,6 +36,7 @@ public class OS {
             int data = reader.read();
             CPU.PM.setPhysicalMem(pageNum, i, data);
         }
+        reader.close();
     }
 
 
@@ -61,12 +58,15 @@ public class OS {
   //this function, when the dirty bit was set, writes back into the files
   private static void writeToPGFile( int pageNum , int evictedOwnerOfPage) throws IOException {
       File outputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
-      BufferedWriter writer = Files.newBufferedWriter(outputPage.toPath(), StandardCharsets.UTF_8, StandardOpenOption.WRITE);
+      BufferedWriter writer = new BufferedWriter(new FileWriter(outputPage));
 
       for( int i = 0; i < 256; i++ ) {
-          //TODO: write to output file
           int data = CPU.PM.getPhysicalMem(pageNum, i);
+          writer.write(data);
+          writer.newLine();
       }
+      writer.flush();
+      writer.close();
   }
   
 
