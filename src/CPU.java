@@ -102,19 +102,6 @@ public class CPU {
                 if (pageFrameNum == -1){  //hard miss
                     Driver.hard = 1;
                     pageFrameNum = OS.hardMiss(address);
-                    
-                    //TODO:
-                    //call OS to get data from files
-                    //store data in physical mem
-                    //return the "page" number
-                    //code for outputting to CSV file about evited page # && if the page was dirty goes here
-
-                    /*
-                    remove comments later for when OS makes the function this needs
-                    PLEASE DONT USE THE FUNCTION AS THE REASON FUNCTION NAME!! SERIOUSLY!
-                    also removese these "real" comments~_~
-                    pageFrameNum = OS_Function_That_Adds_Data_Into_Physical_Mem_And_Returns_The_Page_Number();
-                     */
                 }
                 else{   //soft miss
                     //nothing "logic" code happens here, just here to write that a soft miss happened
@@ -146,23 +133,3 @@ public class CPU {
             return -1;
         }
     }
-  /*Class MMU{
-    int R/W;
-    int address; //what does this store?
-    int data;
-    public static void ReplaceTLBEntry(){
-    }
-    public static int getData(int, int, int){
-      - Sets 3 ints
-      if (check.TLB() > -1){// if valid
-      }
-      else if (check.Pagetable() > -1){// if valid
-        h/m/s is set
-      }
-      if (r/w == 1){
-        set d = 1
-      }
-      return page frame #
-    }
-  }*/
-}
