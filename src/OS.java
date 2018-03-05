@@ -29,22 +29,21 @@ public class OS {
       }
   }
 
-  //this function takes data from the file, then inputs it into physical memory
-  private static void writeToPhysicalMem(int pageNum, int newOwnerOfPage) throws IOException {
-      // open correct file from folder
-      File inputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
-      BufferedReader reader = new BufferedReader( new FileReader(inputPage) );
+    //this function takes data from the file, then inputs it into physical memory
+    private static void writeToPhysicalMem(int pageNum, int newOwnerOfPage) throws IOException {
+        // open correct file from folder
+        File inputPage = new File("../page_files/original/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
+        BufferedReader reader = new BufferedReader( new FileReader(inputPage) );
+        setAllBits(newOwnerOfPage, pageNum);
+        //input data from file into physical memory
+        for( int i = 0; i < 256; i++) {
+            int data = reader.read();
+            CPU.PM.setPhysicalMem(pageNum, i, data);
+        }
+    }
 
 
-      setAllBits(newOwnerOfPage, pageNum);
-      //input data from file into physical memory
-      for( int i = 0; i < 256; i++) {
-          //TODO: get data from file and write into physical memory
-          CPU.PM.setPhysicalMem(pageNum, i, /*data to be written to [A][BC]*/);
-      }
-  }
-
-  private static void setAllBits(int newOwnerOfPage, int pageNum){
+    private static void setAllBits(int newOwnerOfPage, int pageNum){
       for(int i=0; i< 8; i++)
           if( CPU.TLB[i].getvPageNum() == newOwnerOfPage){
               CPU.TLB[i].setV(1);
@@ -60,7 +59,7 @@ public class OS {
   }
 
   //this function, when the dirty bit was set, writes back into the files
-  private static void writeToPGFile( int pageNum , int evitedOwnerOfPage) throws IOException {
+  private static void writeToPGFile( int pageNum , int evictedOwnerOfPage) throws IOException {
       File outputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
       BufferedWriter writer = Files.newBufferedWriter(outputPage.toPath(), StandardCharsets.UTF_8, StandardOpenOption.WRITE);
 
