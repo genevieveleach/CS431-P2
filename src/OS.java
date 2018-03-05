@@ -65,6 +65,7 @@ public class OS {
 
       for( int i = 0; i < 256; i++ ) {
           //TODO: write to output file
+          int data = CPU.PM.getPhysicalMem(pageNum, i);
       }
   }
   

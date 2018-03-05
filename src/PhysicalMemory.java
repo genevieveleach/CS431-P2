@@ -10,7 +10,7 @@ public class PhysicalMemory{
     public PhysicalMemory() {
     }
 
-    public double getPhysicalMem(int row, int col){
+    public int getPhysicalMem(int row, int col){
         return ram[row][col];
     }
     public void setPhysicalMem(int row, int col, int val){
