@@ -39,7 +39,7 @@ public class OS {
       //input data from file into physical memory
       for( int i = 0; i < 256; i++) {
           //TODO:
-          CPU.PM.setPhysicalMem(pageNum, i, /*data to be written to [A][BC]*/);
+          CPU.PM.setPhysicalMem(pageNum, i, /*(writer?)data to be written to [A][BC]*/);
       }
   }
 
