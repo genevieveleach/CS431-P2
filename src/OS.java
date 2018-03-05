@@ -61,9 +61,8 @@ public class OS {
       BufferedWriter writer = new BufferedWriter(new FileWriter(outputPage));
 
       for( int i = 0; i < 256; i++ ) {
-          int data = CPU.PM.getPhysicalMem(pageNum, i);
+          String data = String.valueOf(CPU.PM.getPhysicalMem(pageNum, i));
           writer.write(data);
-          writer.newLine();
       }
       writer.flush();
       writer.close();
