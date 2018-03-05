@@ -119,7 +119,7 @@ public class CPU {
                     Driver.hard = 0;
                     Driver.hit = 0;
                     Driver.evicted = "N/A";
-                    Driver.dirty = -1;
+                    Driver.dirty = 0;
                 }
                 //new TLB entry due to miss
                 newPageTableEntry(pageFrameNum, address);
@@ -130,7 +130,7 @@ public class CPU {
                 Driver.soft = 0;
                 Driver.hard = 0;
                 Driver.evicted = "N/A";
-                Driver.dirty = -1;
+                Driver.dirty = 0;
             }
             //System.out.println(pageFrameNum + " check"); //debug
             return pageFrameNum;

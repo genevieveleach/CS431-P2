@@ -14,7 +14,6 @@ public class VirtualPageTable {
       virtPageTable[i].setR(0);
   }
 
-
   //getters and setters
   public int getV(int index) { return virtPageTable[index].getV(); }
   public int getR(int index) { return virtPageTable[index].getR(); }

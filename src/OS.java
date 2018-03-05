@@ -68,38 +68,6 @@ public class OS {
       writer.flush();
       writer.close();
   }
-  
-
-  /*static int hardMiss( int pageNum ) throws IOException {
-
-  static int hardMiss( int pageNum, VirtualPageTable vpt ) throws IOException {
-      boolean check = true;
-      int tempClock = 0;
-      while(check) {
-        if(CPU.vPT.getR(clockIndex) == 0) {
-            //System.out.println("Evicted");
-            Driver.evicted = Integer.toHexString(pageNum);
-            Driver.dirty = 0;
-            if(vpt.getD(pageNum) == 1) {
-                writePage( pageNum );
-                Driver.dirty = 1;
-            }
-            writeMemory( pageNum );
-            check = false;
-        }
-        else {
-            vpt.setR(clockIndex, 0);
-            //System.out.println("Next");
-        }
-        tempClock = clockIndex;
-        clockIndex++;
-        if(clockIndex > 15)
-            clockIndex = 0;
-      }
-      //System.out.println(tempClock + "");
-      return tempClock;
-  }*/
-  
 
   static void resetR(TLBEntry[] TLB, VirtualPageTable pageTable) {
       for(int i = 0; i < TLB.length; i++) {
