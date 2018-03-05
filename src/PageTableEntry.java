@@ -3,7 +3,7 @@ public class PageTableEntry{
     private int pageFrameNum;
     private int v, r, d;
 
-    PageTableEntry(int frameNum){
+    public PageTableEntry(int frameNum){
         pageFrameNum=frameNum;
         v = 0; r = 0; d = 0;
     }

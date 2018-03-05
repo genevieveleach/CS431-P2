@@ -19,6 +19,7 @@ public class Driver {
         Scanner input = new Scanner(file);
         csv = new PrintStream(new FileOutputStream("output.csv"));
         writeHeaderToFile();
+        new CPU();
         OS.initPages();
         CPU.readFile(input);
     }

@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.StandardCopyOption;
 
 public class OS {
   /*pointer to array values in page table
@@ -36,7 +37,7 @@ public class OS {
           
           String src = "../page_files/original/" + temp + ".pg";
           String dest = "../page_files/copy/" + temp + ".pg";
-          Files.copy(Paths.get(src), Paths.get(dest));
+          Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
       }
   }
 

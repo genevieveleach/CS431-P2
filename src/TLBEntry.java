@@ -2,11 +2,11 @@ public class TLBEntry extends PageTableEntry {
 
     private int vPageNum;
 
-    TLBEntry(int pageFrameNum, int vPageNum) {
+    public TLBEntry(int pageFrameNum, int vPageNum) {
         super(pageFrameNum);
         this.vPageNum = vPageNum;
     }
-    TLBEntry() {
+    public TLBEntry() {
         super(-1);
         vPageNum = -1;
     }
