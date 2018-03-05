@@ -67,22 +67,15 @@ public class OS {
       }
   }
   
-  static int hardMiss( int pageNum ) throws IOException {
+  static int hardMiss( int pageNum, VirtualPageTable vpt ) throws IOException {
       boolean check = true;
       int tempClock = 0;
       while(check) {
-        if(CPU.vPT.getPageFrameNum(pageNum) == -1) {
-            //System.out.println("Empty");
-            writeMemory( pageNum );
-            Driver.evicted = "N/A";
-            Driver.dirty = 0;
-            check = false;
-        }
-        else if(CPU.vPT.getR(pageNum) == 0) {
-            System.out.println("Evicted");
+        if(CPU.vPT.getR(clockIndex) == 0) {
+            //System.out.println("Evicted");
             Driver.evicted = Integer.toHexString(pageNum);
             Driver.dirty = 0;
-            if(CPU.vPT.getD(pageNum) == 1) {
+            if(vpt.getD(pageNum) == 1) {
                 writePage( pageNum );
                 Driver.dirty = 1;
             }
@@ -90,15 +83,15 @@ public class OS {
             check = false;
         }
         else {
-            CPU.vPT.setR(pageNum, 0);
-                        System.out.println("Next");
+            vpt.setR(clockIndex, 0);
+            //System.out.println("Next");
         }
         tempClock = clockIndex;
         clockIndex++;
         if(clockIndex > 15)
             clockIndex = 0;
       }
-      System.out.println(tempClock + "");
+      //System.out.println(tempClock + "");
       return tempClock;
   }
   

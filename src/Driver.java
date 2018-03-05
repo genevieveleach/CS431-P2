@@ -19,9 +19,9 @@ public class Driver {
         Scanner input = new Scanner(file);
         csv = new PrintStream(new FileOutputStream("output.csv"));
         writeHeaderToFile();
-        new CPU();
+        CPU bob = new CPU();
         OS.initPages();
-        CPU.readFile(input);
+        bob.readFile(input);
     }
 
     private static void writeHeaderToFile() {
