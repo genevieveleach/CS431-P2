@@ -15,8 +15,8 @@ public class Driver {
 
     public static void main(String[] args) throws Exception {
         String path = args[0];
-        File file = new File(path);
-        Scanner input = new Scanner("../test_files/"+ file);
+        File file = new File( "../test_files/"+ path );
+        Scanner input = new Scanner(file);
         csv = new PrintStream(new FileOutputStream("output.csv"));
         writeHeaderToFile();
         new CPU();
