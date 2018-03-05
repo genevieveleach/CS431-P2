@@ -29,45 +29,35 @@ public class OS {
       }
   }
 
-  static void writePage(int pageNum) throws IOException {
-      String temp;
-      if(pageNum < 16) {
-        temp = "0" + Integer.toHexString(pageNum).toUpperCase();
-      }
-      else {
-        temp = Integer.toHexString(pageNum).toUpperCase();
-      }
-
-      File outputPage = new File("../page_files/copy/" + temp + ".pg");
+  //this function takes data from the file, then inputs it into physical memory
+  private static void writeToPhysicalMem(int pageNum, int newOwnerOfPage) throws IOException {
+      // open correct file from folder
+      File outputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
       BufferedWriter writer = Files.newBufferedWriter(outputPage.toPath(), StandardCharsets.UTF_8, StandardOpenOption.WRITE);
-      for( int i = 0; i < 256; i++) {
-        double data = CPU.PM.getPhysicalMem( clockIndex, i );
-        writer.write(temp);
-        writer.newLine();
-      }
-  }
-  
-  static void writeMemory( int pageNum ) throws IOException {
-      String temp;
-      if(pageNum < 16) {
-        temp = "0" + Integer.toHexString(pageNum).toUpperCase();
-      }
-      else {
-        temp = Integer.toHexString(pageNum).toUpperCase();
-      }
-        
-      File inputPage = new File("../page_files/copy/" + temp + ".pg");
-      BufferedReader reader = new BufferedReader( new FileReader(inputPage) );
+
       CPU.vPT.setV(pageNum, 1);
       CPU.vPT.setR(pageNum, 1);
       CPU.vPT.setD(pageNum, 0);
-      CPU.vPT.setPageFrameNum(pageNum, clockIndex);
+      CPU.vPT.setPageFrameNum(newOwnerOfPage, pageNum);
+      //input data from file into physical memory
+      for( int i = 0; i < 256; i++) {
+          //TODO:
+          CPU.PM.setPhysicalMem(pageNum, i, /*data to be written to [A][BC]*/);
+      }
+  }
+
+  //this function, when the dirty bit was set, writes back into the files
+  private static void writeToPGFile( int pageNum , int evitedOwnerOfPage) throws IOException {
+      File inputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
+      BufferedReader reader = new BufferedReader( new FileReader(inputPage) );
+
       for( int i = 0; i < 256; i++ ) {
+          //TODO:
         CPU.PM.setPhysicalMem( clockIndex, i, Integer.parseInt(reader.readLine()));
       }
   }
   
-  static int hardMiss( int pageNum ) throws IOException {
+  /*static int hardMiss( int pageNum ) throws IOException {
       boolean check = true;
       int tempClock = 0;
       while(check) {
@@ -100,7 +90,7 @@ public class OS {
       }
       System.out.println(tempClock + "");
       return tempClock;
-  }
+  }*/
   
 
   static void resetR(TLBEntry[] TLB, VirtualPageTable pageTable) {
@@ -109,4 +99,57 @@ public class OS {
       }
       pageTable.resetRBit();
   }
+
+
+  ///testsss
+    private static int numOfPagesLeft = 0;
+    public static int hardMiss(int pageNum) throws IOException{
+        if ( numOfPagesLeft < 16){  //there are still free pages available
+            // just add them straight;
+            writeToPhysicalMem(numOfPagesLeft, pageNum);
+            numOfPagesLeft++;
+            return numOfPagesLeft - 1;
+        }
+        else{   //so, all pages have been used up, so we need to activate the clock replacement algorithm
+            for(int i = (clockIndex + 1) % 256; i != clockIndex; i = (i + 1) % 256){
+                if (CPU.vPT.getV(i) == 1  && CPU.vPT.getR(i)==0){
+                    clockIndex = i;
+                    return evict(pageNum, i);
+                }
+            }
+        }
+        System.out.println("Your CPU has exploded, please ask for better value products!!");
+        return -1;
+    }
+    //in here i will go to the page=pageNum and write to it the file [address].pg
+
+    //in here i will do the same thing as above, but i will also reset all values in the
+    //old vPT entry
+    private static int evict(int newOwnerOfPageIndex, int evictedPageOwnerIndex) throws IOException{
+
+        //if vPT ==> D bit = 1, then write
+        int pageNum = CPU.vPT.getPageFrameNum(evictedPageOwnerIndex);
+        if (CPU.vPT.getD(evictedPageOwnerIndex) == 1)
+            writeToPGFile(pageNum, evictedPageOwnerIndex);
+        resetVRDBits(evictedPageOwnerIndex);
+        writeToPhysicalMem(pageNum, newOwnerOfPageIndex);
+        return pageNum;
+    }
+
+    //this goes and resets the TLB and virutal page table values back to invalid 0|0|0
+    private static void resetVRDBits(int evictedAddress){
+        for(int i=0; i< 8; i++){
+            if (CPU.TLB[i].getvPageNum() == evictedAddress){
+                CPU.TLB[i].setV(0);
+                CPU.TLB[i].setR(0);
+                CPU.TLB[i].setPageFrameNum(0);
+                CPU.TLB[i].setD(0);
+                break;
+            }
+        }
+        CPU.vPT.setR(evictedAddress, 0);
+        CPU.vPT.setV(evictedAddress, 0);
+        CPU.vPT.setD(evictedAddress, 0);
+        CPU.vPT.setPageFrameNum(evictedAddress, -1);
+    }
 }

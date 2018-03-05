@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class CPU {
     //variables
-    private static TLBEntry[] TLB = new TLBEntry[8];
+    public static TLBEntry[] TLB = new TLBEntry[8];
     public static VirtualPageTable vPT;
     public static PhysicalMemory PM;
 
