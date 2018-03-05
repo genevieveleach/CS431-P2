@@ -28,7 +28,7 @@ public class OS {
     //this function takes data from the file, then inputs it into physical memory
     private static void writeToPhysicalMem(int pageNum, int newOwnerOfPage) throws IOException {
         // open correct file from folder
-        File inputPage = new File("../page_files/original/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
+        File inputPage = new File("../page_files/original/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum).toUpperCase() + ".pg");
         BufferedReader reader = new BufferedReader( new FileReader(inputPage) );
         setAllBits(newOwnerOfPage, pageNum);
         //input data from file into physical memory
