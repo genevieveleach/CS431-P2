@@ -106,7 +106,7 @@ public class CPU {
                     Driver.hard = 1;
                     Driver.soft = 0;
                     Driver.hit = 0;
-                    pageFrameNum = OS.hardMiss(address, vPT);
+                    pageFrameNum = OS.hardMiss(address);
                     //System.out.println(pageFrameNum + "");
                     vPT.setPageFrameNum(address, pageFrameNum);
                     vPT.setR(address, 1);

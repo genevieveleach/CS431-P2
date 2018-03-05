@@ -32,13 +32,14 @@ public class OS {
   //this function takes data from the file, then inputs it into physical memory
   private static void writeToPhysicalMem(int pageNum, int newOwnerOfPage) throws IOException {
       // open correct file from folder
-      File outputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
-      BufferedWriter writer = Files.newBufferedWriter(outputPage.toPath(), StandardCharsets.UTF_8, StandardOpenOption.WRITE);
+      File inputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
+      BufferedReader reader = new BufferedReader( new FileReader(inputPage) );
+
 
       setAllBits(newOwnerOfPage, pageNum);
       //input data from file into physical memory
       for( int i = 0; i < 256; i++) {
-          //TODO:
+          //TODO: get data from file and write into physical memory
           CPU.PM.setPhysicalMem(pageNum, i, /*data to be written to [A][BC]*/);
       }
   }
@@ -60,12 +61,11 @@ public class OS {
 
   //this function, when the dirty bit was set, writes back into the files
   private static void writeToPGFile( int pageNum , int evitedOwnerOfPage) throws IOException {
-      File inputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
-      BufferedReader reader = new BufferedReader( new FileReader(inputPage) );
+      File outputPage = new File("../page_files/copy/" + (pageNum < 16 ? "0":"") + Integer.toHexString(pageNum) + ".pg");
+      BufferedWriter writer = Files.newBufferedWriter(outputPage.toPath(), StandardCharsets.UTF_8, StandardOpenOption.WRITE);
 
       for( int i = 0; i < 256; i++ ) {
-          //TODO:
-        CPU.PM.setPhysicalMem( clockIndex, i, Integer.parseInt(reader.readLine()));
+          //TODO: write to output file
       }
   }
   
