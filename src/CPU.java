@@ -72,9 +72,10 @@ public class CPU {
             if (rw == 1) {   //write
                 PM.setPhysicalMem(pageFrameNum, offset, data);
                 Driver.value = Integer.toString(data);
+                System.out.println(Integer.toString(data));
             }
             else {   //read
-                //System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
+                System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
                 Driver.value = Double.toString(PM.getPhysicalMem(pageFrameNum, offset));
             }
             return 0;
@@ -105,8 +106,8 @@ public class CPU {
                     Driver.hard = 1;
                     Driver.soft = 0;
                     Driver.hit = 0;
-                    pageFrameNum = OS.hardMiss(address);
-                    //System.out.print(pageFrameNum + "");
+                    pageFrameNum = OS.hardMiss(address, vPT);
+                    //System.out.println(pageFrameNum + "");
                     vPT.setPageFrameNum(address, pageFrameNum);
                     vPT.setR(address, 1);
                     vPT.setV(address, 1);
@@ -142,7 +143,14 @@ public class CPU {
             //System.out.println("tlb pointer: " + TLBPointer);
         }
         private static int checkPageTable(int address) {
-            return vPT.getV(address) == 1 ? vPT.getPageFrameNum(address):-1;
+            if( vPT.getPageFrameNum(address) == -1 ) {
+                //System.out.println("-1");
+                return -1;
+            }
+            else {
+                //System.out.println("00000");
+                return vPT.getPageFrameNum(address);
+            }
         }
         private static int checkTLB(int address) {
             for(int i = 0; i < 8; i++) {

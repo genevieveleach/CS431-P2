@@ -12,7 +12,7 @@ public class PageTableEntry{
     public void setV(int validBit){ v = validBit; }
     public void setR(int readBit) { r = readBit; }
     public void setD(int dirtyBit) { d = dirtyBit; }
-    public void setPageFrameNum(int pFrameNum) { pageFrameNum = pFrameNum; }
+    public void setPageFrameNum(int pFrameNum) { this.pageFrameNum = pFrameNum; }
 
     public int getV(){ return v; }
     public int getD(){ return d; }
