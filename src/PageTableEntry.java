@@ -4,7 +4,7 @@ public class PageTableEntry{
     private int v, r, d;
 
     public PageTableEntry(int frameNum){
-        pageFrameNum=frameNum;
+        this.pageFrameNum=frameNum;
         v = 0; r = 0; d = 0;
     }
 

@@ -69,28 +69,37 @@ public class OS {
   
   static int hardMiss( int pageNum ) throws IOException {
       boolean check = true;
+      int tempClock = 0;
       while(check) {
-        if(CPU.vPT.getPageFrameNum(clockIndex) == -1) {
+        if(CPU.vPT.getPageFrameNum(pageNum) == -1) {
+            //System.out.println("Empty");
             writeMemory( pageNum );
+            Driver.evicted = "N/A";
+            Driver.dirty = 0;
             check = false;
         }
-        else if(CPU.vPT.getR(clockIndex) == 0) {
-            if(CPU.vPT.getD(clockIndex) == 1)
+        else if(CPU.vPT.getR(pageNum) == 0) {
+            System.out.println("Evicted");
+            Driver.evicted = Integer.toHexString(pageNum);
+            Driver.dirty = 0;
+            if(CPU.vPT.getD(pageNum) == 1) {
                 writePage( pageNum );
+                Driver.dirty = 1;
+            }
             writeMemory( pageNum );
             check = false;
         }
         else {
-            CPU.vPT.setR(clockIndex, 0);
+            CPU.vPT.setR(pageNum, 0);
+                        System.out.println("Next");
         }
+        tempClock = clockIndex;
         clockIndex++;
         if(clockIndex > 15)
             clockIndex = 0;
       }
-      if(clockIndex == 0)
-        return 15;
-      else
-        return clockIndex - 1;
+      System.out.println(tempClock + "");
+      return tempClock;
   }
   
 

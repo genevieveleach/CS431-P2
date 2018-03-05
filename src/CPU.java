@@ -54,7 +54,7 @@ public class CPU {
         static int rw;
         static String address;
         static int data;
-        static int TLBPointer;
+        static int TLBPointer = 0;
 
         public MMU() { TLBPointer = 0; }
 
@@ -74,7 +74,7 @@ public class CPU {
                 Driver.value = Integer.toString(data);
             }
             else {   //read
-                System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
+                //System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
                 Driver.value = Double.toString(PM.getPhysicalMem(pageFrameNum, offset));
             }
             return 0;
@@ -97,28 +97,39 @@ public class CPU {
         private static int getPageFrameNum(int address) throws IOException{
             //initial TLB check
             int pageFrameNum = checkTLB(address);
+            //System.out.println("TLB" + pageFrameNum);
             if (pageFrameNum == -1){  //miss in TLB
                 pageFrameNum = checkPageTable(address);
+                //System.out.println("VPT" + pageFrameNum);
                 if (pageFrameNum == -1){  //hard miss
                     Driver.hard = 1;
                     Driver.soft = 0;
                     Driver.hit = 0;
                     pageFrameNum = OS.hardMiss(address);
+                    //System.out.print(pageFrameNum + "");
+                    vPT.setPageFrameNum(address, pageFrameNum);
+                    vPT.setR(address, 1);
+                    vPT.setV(address, 1);
+                    vPT.setD(address, 0);
                 }
                 else{   //soft miss
                     //nothing "logic" code happens here, just here to write that a soft miss happened
                     Driver.soft = 1;
                     Driver.hard = 0;
                     Driver.hit = 0;
+                    Driver.evicted = "N/A";
+                    Driver.dirty = -1;
                 }
                 //new TLB entry due to miss
                 newPageTableEntry(pageFrameNum, address);
             }
             else{ //hit
-                pageFrameNum = TLB[pageFrameNum].getPageFrameNum();
+                //pageFrameNum = TLB[pageFrameNum].getPageFrameNum();
                 Driver.hit = 1;
                 Driver.soft = 0;
                 Driver.hard = 0;
+                Driver.evicted = "N/A";
+                Driver.dirty = -1;
             }
             //System.out.println(pageFrameNum + " check"); //debug
             return pageFrameNum;
@@ -128,14 +139,17 @@ public class CPU {
             temp.setV(1);
             TLB[TLBPointer] = temp;
             TLBPointer = (TLBPointer + 1) % 8;
+            //System.out.println("tlb pointer: " + TLBPointer);
         }
         private static int checkPageTable(int address) {
             return vPT.getV(address) == 1 ? vPT.getPageFrameNum(address):-1;
         }
         private static int checkTLB(int address) {
             for(int i = 0; i < 8; i++) {
-                if(TLB[i].getvPageNum() == address && TLB[i].getV() == 1) return i;
+                if(TLB[i].getvPageNum() == address && TLB[i].getV() == 1)
+                    return TLB[i].getPageFrameNum();
             }
             return -1;
         }
     }
+}

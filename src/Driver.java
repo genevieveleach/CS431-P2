@@ -9,8 +9,8 @@ public class Driver {
     static int soft;
     static int hard;
     static int hit;
-    static String evicted;
-    static String dirty;
+    public static String evicted;
+    public static int dirty;
     static PrintStream csv;
 
     public static void main(String[] args) throws Exception {
