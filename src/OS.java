@@ -10,18 +10,6 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.StandardCopyOption;
 
 public class OS {
-  /*pointer to array values in page table
-  ReplacePageEntry()
-  int pointer
-  ReadPage()
-    - reads pagefile and loads it into memory
-      -.pg
-  WritePage()
-    - write to .pg file from Physical memory
-    - reset d bit
-  ResetR()*/
-
-  //TODO: as of rn is actually just get page but we'll fix that
   static int clockIndex;
   
   static void initPages() throws IOException {
