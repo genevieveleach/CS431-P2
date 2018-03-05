@@ -63,6 +63,7 @@ public class OS {
       for( int i = 0; i < 256; i++ ) {
           String data = String.valueOf(CPU.PM.getPhysicalMem(pageNum, i));
           writer.write(data);
+          writer.newLine();
       }
       writer.flush();
       writer.close();
