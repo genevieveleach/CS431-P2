@@ -101,11 +101,15 @@ public class CPU {
                 pageFrameNum = checkPageTable(address);
                 if (pageFrameNum == -1){  //hard miss
                     Driver.hard = 1;
+                    Driver.soft = 0;
+                    Driver.hit = 0;
                     pageFrameNum = OS.hardMiss(address);
                 }
                 else{   //soft miss
                     //nothing "logic" code happens here, just here to write that a soft miss happened
                     Driver.soft = 1;
+                    Driver.hard = 0;
+                    Driver.hit = 0;
                 }
                 //new TLB entry due to miss
                 newPageTableEntry(pageFrameNum, address);
@@ -113,6 +117,8 @@ public class CPU {
             else{ //hit
                 pageFrameNum = TLB[pageFrameNum].getPageFrameNum();
                 Driver.hit = 1;
+                Driver.soft = 0;
+                Driver.hard = 0;
             }
             //System.out.println(pageFrameNum + " check"); //debug
             return pageFrameNum;
