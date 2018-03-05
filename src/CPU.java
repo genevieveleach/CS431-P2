@@ -25,6 +25,7 @@ public class CPU {
             Driver.rw = rw;
             String line = input.nextLine();
             Driver.addr = line;
+            //System.out.println("Broken" + Driver.addr); //dbug
             if (rw == 0){
                 if (instCount % 5 == 0) {
                     OS.resetR(TLB, vPT);
@@ -128,6 +129,7 @@ public class CPU {
                 pageFrameNum = TLB[pageFrameNum].getPageFrameNum();
                 Driver.hit = 1;
             }
+            //System.out.println(pageFrameNum + " check"); //debug
             return pageFrameNum;
         }
         private static void newPageTableEntry(int pFrameNum, int address){

@@ -99,7 +99,10 @@ public class OS {
         if(clockIndex > 15)
             clockIndex = 0;
       }
-      return clockIndex - 1;
+      if(clockIndex == 0)
+        return 15;
+      else
+        return clockIndex - 1;
   }
   
 
