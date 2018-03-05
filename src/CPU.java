@@ -75,8 +75,8 @@ public class CPU {
                 System.out.println(Integer.toString(data));
             }
             else {   //read
-                System.out.println(PM.getPhysicalMem(pageFrameNum, offset));
-                Driver.value = Double.toString(PM.getPhysicalMem(pageFrameNum, offset));
+                System.out.println(PM.getPhysicalMem(pageFrameNum, offset) + "");
+                Driver.value = Integer.toString(PM.getPhysicalMem(pageFrameNum, offset));
             }
             return 0;
         }
